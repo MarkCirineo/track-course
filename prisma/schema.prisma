@@ -1,0 +1,53 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Course {
+  id            String   @id @default(cuid())
+  trackmanId    String   @unique
+  dbId         String?
+  createdAt     DateTime?
+  description   String?
+  displayName   String
+  numbersOfHoles Int?
+  courseLocation String?
+  difficulty    Int?
+  tags         String[] @default([])
+  imageUrl      String?
+  videoUrl      String?
+  latitude      Float?
+  longitude     Float?
+  googleMapUrl  String?
+  syncedAt      DateTime?
+  tees         Tee[]
+
+  @@index([displayName])
+}
+
+model Tee {
+  id             String  @id @default(cuid())
+  courseId       String
+  course         Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  par            Int?
+  courseDistance Int?
+  courseRating   Float?
+  slope          Int?
+  gender         String?
+  kind           String?
+  name           String?
+
+  @@index([courseId])
+  @@index([courseRating, slope])
+  @@index([gender])
+}
