@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/components/providers";
+import { ThemeToggle } from "@/components/theme-toggle";
+import Link from "next/link";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,24 +26,27 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <header className="border-b">
-          <nav className="container mx-auto flex h-14 items-center gap-6 px-4">
-            <a href="/" className="font-semibold">
-              Trackman Course Map
-            </a>
-            <a href="/courses" className="text-muted-foreground hover:text-foreground">
-              List
-            </a>
-            <a href="/courses/map" className="text-muted-foreground hover:text-foreground">
-              Map
-            </a>
-          </nav>
-        </header>
-        {children}
+        <ThemeProvider>
+          <header className="border-b">
+            <nav className="container mx-auto flex h-14 items-center gap-6 px-4">
+              <Link href="/" className="font-semibold">
+                Trackman Course Map
+              </Link>
+              <Link href="/courses" className="text-muted-foreground hover:text-foreground">
+                List
+              </Link>
+              <Link href="/courses/map" className="text-muted-foreground hover:text-foreground">
+                Map
+              </Link>
+              <ThemeToggle />
+            </nav>
+          </header>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
