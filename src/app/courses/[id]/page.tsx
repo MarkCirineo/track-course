@@ -33,6 +33,9 @@ export default async function CourseDetailPage({
             {course.courseLocation && (
               <p className="text-muted-foreground">{course.courseLocation}</p>
             )}
+            {course.numbersOfHoles != null && (
+              <p className="text-sm text-muted-foreground">{course.numbersOfHoles} holes</p>
+            )}
           </div>
           {course.googleMapUrl && (
             <Button asChild variant="outline">
@@ -76,29 +79,95 @@ export default async function CourseDetailPage({
             <h2 className="text-lg font-medium">Tees &amp; ratings</h2>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-wrap gap-2">
-              {course.tees.map((tee) => (
-                <Badge key={tee.id} variant="secondary" className="text-sm">
-                  {tee.name || tee.gender || "Tee"}: Rating {tee.courseRating ?? "—"} / Slope{" "}
-                  {tee.slope ?? "—"}
-                  {tee.par != null && ` · Par ${tee.par}`}
-                  {tee.courseDistance != null && ` · ${tee.courseDistance} yd`}
-                </Badge>
-              ))}
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              {(() => {
+                const menTees = course.tees.filter((t) => t.gender === "MALE");
+                const womenTees = course.tees.filter((t) => t.gender === "FEMALE");
+                const otherTees = course.tees.filter(
+                  (t) => t.gender !== "MALE" && t.gender !== "FEMALE"
+                );
+                return (
+                  <>
+                    <div className="space-y-2">
+                      <h3 className="text-sm font-medium text-muted-foreground">
+                        Men's tees
+                      </h3>
+                      <div className="flex flex-wrap gap-2">
+                        {menTees.length > 0
+                          ? menTees.map((tee) => (
+                              <Badge
+                                key={tee.id}
+                                variant="secondary"
+                                className="text-sm"
+                              >
+                                {tee.name || "Tee"}: Rating {tee.courseRating ?? "—"} / Slope{" "}
+                                {tee.slope ?? "—"}
+                                {tee.par != null && ` · Par ${tee.par}`}
+                                {tee.courseDistance != null &&
+                                  ` · ${tee.courseDistance} yd`}
+                              </Badge>
+                            ))
+                          : (
+                              <span className="text-sm text-muted-foreground">
+                                —
+                              </span>
+                            )}
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <h3 className="text-sm font-medium text-muted-foreground">
+                        Women's tees
+                      </h3>
+                      <div className="flex flex-wrap gap-2">
+                        {womenTees.length > 0
+                          ? womenTees.map((tee) => (
+                              <Badge
+                                key={tee.id}
+                                variant="secondary"
+                                className="text-sm"
+                              >
+                                {tee.name || "Tee"}: Rating {tee.courseRating ?? "—"} / Slope{" "}
+                                {tee.slope ?? "—"}
+                                {tee.par != null && ` · Par ${tee.par}`}
+                                {tee.courseDistance != null &&
+                                  ` · ${tee.courseDistance} yd`}
+                              </Badge>
+                            ))
+                          : (
+                              <span className="text-sm text-muted-foreground">
+                                —
+                              </span>
+                            )}
+                      </div>
+                    </div>
+                    {otherTees.length > 0 && (
+                      <div className="space-y-2 md:col-span-2">
+                        <h3 className="text-sm font-medium text-muted-foreground">
+                          Other tees
+                        </h3>
+                        <div className="flex flex-wrap gap-2">
+                          {otherTees.map((tee) => (
+                            <Badge
+                              key={tee.id}
+                              variant="secondary"
+                              className="text-sm"
+                            >
+                              {tee.name || tee.gender || "Tee"}: Rating{" "}
+                              {tee.courseRating ?? "—"} / Slope {tee.slope ?? "—"}
+                              {tee.par != null && ` · Par ${tee.par}`}
+                              {tee.courseDistance != null &&
+                                ` · ${tee.courseDistance} yd`}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </>
+                );
+              })()}
             </div>
           </CardContent>
         </Card>
-
-        {course.difficulty && (
-          <p className="text-sm text-muted-foreground">
-            Difficulty: {course.difficulty}
-          </p>
-        )}
-        {course.numbersOfHoles != null && (
-          <p className="text-sm text-muted-foreground">
-            Holes: {course.numbersOfHoles}
-          </p>
-        )}
       </div>
     </main>
   );
