@@ -40,6 +40,7 @@ model Tee {
   id             String    @id @default(cuid())
   courseId       String
   course         Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  teeIndex       Int       // order on course, for batch sync
   par            Int?
   courseDistance Int?
   courseRating   Float?

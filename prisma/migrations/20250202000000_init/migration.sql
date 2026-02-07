@@ -24,6 +24,7 @@ CREATE TABLE "Course" (
 CREATE TABLE "Tee" (
     "id" TEXT NOT NULL,
     "courseId" TEXT NOT NULL,
+    "teeIndex" INTEGER NOT NULL,
     "par" INTEGER,
     "courseDistance" INTEGER,
     "courseRating" DOUBLE PRECISION,
