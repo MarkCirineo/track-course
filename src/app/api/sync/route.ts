@@ -53,6 +53,8 @@ async function syncOneCourse(item: TrackmanCourseItem, now: Date) {
                 courseId: course.id,
                 name: holeItem.name ?? undefined,
                 holeIndex: i,
+                imageUrls:
+                  holeItem.images?.map((img) => img.url).filter((u): u is string => Boolean(u)) ?? [],
               },
             })
           )

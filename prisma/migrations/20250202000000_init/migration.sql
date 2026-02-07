@@ -57,6 +57,7 @@ CREATE TABLE "Hole" (
     "courseId" TEXT NOT NULL,
     "name" TEXT,
     "holeIndex" INTEGER NOT NULL,
+    "imageUrls" TEXT[] DEFAULT ARRAY[]::TEXT[],
 
     CONSTRAINT "Hole_pkey" PRIMARY KEY ("id")
 );

@@ -56,12 +56,13 @@ model Tee {
 }
 
 model Hole {
-  id        String    @id @default(cuid())
-  courseId  String
-  course    Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  name      String?
-  holeIndex Int       // 0-based order on the course
-  holeTees  HoleTee[]
+  id         String    @id @default(cuid())
+  courseId   String
+  course     Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  name       String?
+  holeIndex  Int       // 0-based order on the course
+  imageUrls  String[]  @default([])
+  holeTees   HoleTee[]
 
   @@unique([courseId, holeIndex])
   @@index([courseId])
