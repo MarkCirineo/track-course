@@ -143,7 +143,14 @@ export default async function CoursesPage({
                 </div>
               )}
               <CardHeader className="pb-2">
-                <h2 className="font-semibold leading-tight">{course.displayName}</h2>
+                <div className="flex items-start justify-between gap-2">
+                  <h2 className="font-semibold leading-tight">{course.displayName}</h2>
+                  {course.numbersOfHoles != null && (
+                    <Badge variant="outline" className="shrink-0 text-xs">
+                      {course.numbersOfHoles} hole{course.numbersOfHoles !== 1 ? "s" : ""}
+                    </Badge>
+                  )}
+                </div>
                 {course.courseLocation && (
                   <p className="text-sm text-muted-foreground">{course.courseLocation}</p>
                 )}
