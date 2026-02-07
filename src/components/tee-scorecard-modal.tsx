@@ -181,16 +181,70 @@ export function TeeScorecardSection({
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {course.holes.map((hole) => {
+                    {course.holes.slice(0, 9).map((hole) => {
                       const holeTee = hole.holeTees.find(
                         (ht) => ht.teeId === scorecardTee.id
                       );
+                      const holeNum = hole.holeIndex + 1;
+                      const name = hole.name?.trim();
+                      const holeLabel =
+                        name && name !== String(holeNum)
+                          ? `${holeNum} — ${hole.name}`
+                          : String(holeNum);
                       return (
                         <TableRow key={hole.id}>
-                          <TableCell>
-                            {hole.holeIndex + 1}
-                            {hole.name ? ` — ${hole.name}` : ""}
+                          <TableCell>{holeLabel}</TableCell>
+                          <TableCell className="text-right">
+                            {holeTee?.par ?? "—"}
                           </TableCell>
+                          <TableCell className="text-right">
+                            {holeTee?.strokeIndex ?? "—"}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {holeTee?.distance ?? "—"}
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                    {course.holes.length >= 9 && (
+                      <TableRow className="border-t-2 border-border bg-muted/30 font-medium">
+                        <TableCell>Out</TableCell>
+                        <TableCell className="text-right">
+                          {course.holes
+                            .slice(0, 9)
+                            .reduce((sum, hole) => {
+                              const ht = hole.holeTees.find(
+                                (h) => h.teeId === scorecardTee.id
+                              );
+                              return sum + (ht?.par ?? 0);
+                            }, 0) || "—"}
+                        </TableCell>
+                        <TableCell />
+                        <TableCell className="text-right">
+                          {course.holes
+                            .slice(0, 9)
+                            .reduce((sum, hole) => {
+                              const ht = hole.holeTees.find(
+                                (h) => h.teeId === scorecardTee.id
+                              );
+                              return sum + (ht?.distance ?? 0);
+                            }, 0) || "—"}
+                        </TableCell>
+                      </TableRow>
+                    )}
+                    {course.holes.slice(9, 18).map((hole) => {
+                      const holeTee = hole.holeTees.find(
+                        (ht) => ht.teeId === scorecardTee.id
+                      );
+                      const holeNum = hole.holeIndex + 1;
+                      const name = hole.name?.trim();
+                      const holeLabel =
+                        name && name !== String(holeNum)
+                          ? `${holeNum} — ${hole.name}`
+                          : String(holeNum);
+                      return (
+                        <TableRow key={hole.id}>
+                          <TableCell>{holeLabel}</TableCell>
                           <TableCell className="text-right">
                             {holeTee?.par ?? "—"}
                           </TableCell>
@@ -205,6 +259,32 @@ export function TeeScorecardSection({
                     })}
                   </TableBody>
                   <TableFooter>
+                    {course.holes.length > 9 && (
+                      <TableRow>
+                        <TableCell className="font-medium">In</TableCell>
+                        <TableCell className="text-right">
+                          {course.holes
+                            .slice(9, 18)
+                            .reduce((sum, hole) => {
+                              const ht = hole.holeTees.find(
+                                (h) => h.teeId === scorecardTee.id
+                              );
+                              return sum + (ht?.par ?? 0);
+                            }, 0) || "—"}
+                        </TableCell>
+                        <TableCell />
+                        <TableCell className="text-right">
+                          {course.holes
+                            .slice(9, 18)
+                            .reduce((sum, hole) => {
+                              const ht = hole.holeTees.find(
+                                (h) => h.teeId === scorecardTee.id
+                              );
+                              return sum + (ht?.distance ?? 0);
+                            }, 0) || "—"}
+                        </TableCell>
+                      </TableRow>
+                    )}
                     <TableRow>
                       <TableCell className="font-medium">Total</TableCell>
                       <TableCell className="text-right">
