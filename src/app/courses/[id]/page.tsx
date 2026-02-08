@@ -83,19 +83,6 @@ export default async function CourseDetailPage({
           </div>
         )}
 
-        {course.description && (
-          <Card>
-            <CardHeader className="pb-2">
-              <h2 className="text-lg font-medium">Description</h2>
-            </CardHeader>
-            <CardContent>
-              <p className="whitespace-pre-wrap text-muted-foreground">
-                {course.description}
-              </p>
-            </CardContent>
-          </Card>
-        )}
-
         <Card>
           <CardHeader className="pb-2">
             <h2 className="text-lg font-medium">Tees &amp; ratings</h2>
@@ -110,6 +97,19 @@ export default async function CourseDetailPage({
             />
           </CardContent>
         </Card>
+
+        {course.description && (
+          <Card>
+            <CardHeader className="pb-2">
+              <h2 className="text-lg font-medium">Description</h2>
+            </CardHeader>
+            <CardContent>
+              <p className="whitespace-pre-wrap text-muted-foreground">
+                {course.description}
+              </p>
+            </CardContent>
+          </Card>
+        )}
 
       </div>
     </main>
