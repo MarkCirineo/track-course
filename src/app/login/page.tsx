@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { auth, signIn } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/password-input";
 
 export const metadata = {
   title: "Log in",
@@ -12,21 +13,16 @@ export const metadata = {
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ callbackUrl?: string; error?: string; signedUp?: string }>;
+  searchParams: Promise<{ callbackUrl?: string; error?: string }>;
 }) {
   const session = await auth();
   if (session?.user) redirect((await searchParams).callbackUrl ?? "/courses");
 
-  const { callbackUrl, error, signedUp } = await searchParams;
+  const { callbackUrl, error } = await searchParams;
 
   return (
     <main className="container mx-auto flex max-w-sm flex-col gap-6 px-4 py-16">
       <h1 className="text-2xl font-semibold">Log in</h1>
-      {signedUp === "1" && (
-        <p className="text-sm text-muted-foreground">
-          Account created. Please log in.
-        </p>
-      )}
       {error === "CredentialsSignin" && (
         <p className="text-sm text-destructive">
           Invalid email or password. Please try again.
@@ -60,10 +56,9 @@ export default async function LoginPage({
           <label htmlFor="password" className="text-sm font-medium">
             Password
           </label>
-          <Input
+          <PasswordInput
             id="password"
             name="password"
-            type="password"
             autoComplete="current-password"
             required
           />
