@@ -245,7 +245,9 @@ export function CourseCard({
             <CircleCheck className="size-3.5" />
             {playedSummary.lastHolesPlayed === "front" && <span>F9</span>}
             {playedSummary.lastHolesPlayed === "back" && <span>B9</span>}
-            {playedSummary.lastHolesPlayed === "full" && <span>18</span>}
+            {playedSummary.lastHolesPlayed === "full" && (
+              <span>{course.numbersOfHoles === 9 ? "9" : "18"}</span>
+            )}
           </div>
         )}
       </div>
