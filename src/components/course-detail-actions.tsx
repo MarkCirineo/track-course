@@ -134,7 +134,9 @@ export function CourseDetailActions({
         numbersOfHoles={numbersOfHoles}
         tees={tees}
         holes={holes}
-        onSuccess={() => setFavorited(true)}
+        onSuccess={(addedToFavorites) => {
+          if (addedToFavorites) setFavorited(true);
+        }}
       />
 
       <BookmarkNoteModal

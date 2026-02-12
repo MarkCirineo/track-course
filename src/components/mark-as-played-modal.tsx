@@ -40,7 +40,7 @@ type MarkAsPlayedModalProps = {
   numbersOfHoles: number | null;
   tees: TeeForPlay[];
   holes: HoleForPlay[];
-  onSuccess?: () => void;
+  onSuccess?: (addedToFavorites: boolean) => void;
 };
 
 export function MarkAsPlayedModal({
@@ -105,7 +105,7 @@ export function MarkAsPlayedModal({
       setNote("");
       setAddToFavorites(false);
       setHoleScores({});
-      onSuccess?.();
+      onSuccess?.(addToFavorites);
     } finally {
       setSubmitting(false);
     }
