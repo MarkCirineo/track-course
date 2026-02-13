@@ -90,3 +90,84 @@ export async function createCoursePlay(input: CreateCoursePlayInput) {
     return { error: "Failed to save play" };
   }
 }
+
+export type UpdateCoursePlayInput = {
+  playId: string;
+  overallScore?: number | null;
+  note?: string | null;
+  holeScores?: Record<string, number>;
+};
+
+export async function updateCoursePlay(input: UpdateCoursePlayInput) {
+  const session = await auth();
+  if (!session?.user?.id) return { error: "Unauthorized" };
+
+  const { playId, overallScore, note, holeScores } = input;
+
+  try {
+    const play = await db.coursePlay.findFirst({
+      where: { id: playId, userId: session.user.id },
+      include: { course: { include: { holes: { orderBy: { holeIndex: "asc" } } } } },
+    });
+    if (!play) return { error: "Play not found" };
+
+    await db.coursePlay.update({
+      where: { id: playId },
+      data: {
+        overallScore: overallScore ?? undefined,
+        note: note?.trim() || undefined,
+      },
+    });
+
+    if (holeScores !== undefined) {
+      await db.coursePlayHoleScore.deleteMany({
+        where: { coursePlayId: playId },
+      });
+      const holeIds = play.course.holes.map((h) => h.id);
+      const validEntries = Object.entries(holeScores).filter(
+        ([holeId, score]) => holeIds.includes(holeId) && Number.isFinite(score)
+      );
+      if (validEntries.length > 0) {
+        await db.coursePlayHoleScore.createMany({
+          data: validEntries.map(([holeId, score]) => ({
+            coursePlayId: playId,
+            holeId,
+            score: Number(score),
+          })),
+        });
+      }
+    }
+
+    revalidatePath("/courses");
+    revalidatePath("/account/played");
+    revalidatePath(`/courses/${play.courseId}`);
+    return { ok: true };
+  } catch (e) {
+    console.error(e);
+    return { error: "Failed to update play" };
+  }
+}
+
+export async function deleteCoursePlay(playId: string) {
+  const session = await auth();
+  if (!session?.user?.id) return { error: "Unauthorized" };
+
+  try {
+    const play = await db.coursePlay.findFirst({
+      where: { id: playId, userId: session.user.id },
+    });
+    if (!play) return { error: "Play not found" };
+
+    await db.coursePlay.delete({
+      where: { id: playId },
+    });
+
+    revalidatePath("/courses");
+    revalidatePath("/account/played");
+    revalidatePath(`/courses/${play.courseId}`);
+    return { ok: true };
+  } catch (e) {
+    console.error(e);
+    return { error: "Failed to delete play" };
+  }
+}
