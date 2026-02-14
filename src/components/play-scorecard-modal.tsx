@@ -102,10 +102,10 @@ export function PlayScorecardModal({
     const base = "inline-flex items-center justify-center font-medium tabular-nums";
     if (style === "double-square")
       return (
-        <span className={cn(base, "size-8 rounded-sm border p-0.5", border)}>
+        <span className={cn(base, "size-7 rounded-none border p-[2px]", border)}>
           <span
             className={cn(
-              "flex size-6 items-center justify-center rounded-sm border text-sm",
+              "flex size-5 items-center justify-center rounded-none border text-sm",
               border
             )}
           >
@@ -115,7 +115,9 @@ export function PlayScorecardModal({
       );
     if (style === "single-square")
       return (
-        <span className={cn(base, "size-7 rounded-sm border px-1 text-sm", border)}>{content}</span>
+        <span className={cn(base, "size-7 rounded-none border px-1 text-sm", border)}>
+          {content}
+        </span>
       );
     if (style === "single-circle")
       return (
@@ -125,7 +127,7 @@ export function PlayScorecardModal({
       );
     if (style === "double-circle")
       return (
-        <span className={cn(base, "size-8 rounded-full border p-0.5", border)}>
+        <span className={cn(base, "size-7 rounded-full border p-[2px]", border)}>
           <span
             className={cn(
               "flex size-5 items-center justify-center rounded-full border text-xs",
@@ -212,7 +214,7 @@ export function PlayScorecardModal({
                           </div>
                           <div className="flex items-center gap-2">
                             <span className="inline-flex size-5 items-center justify-center rounded-sm border-2 border-background p-0.5">
-                              <span className="flex size-3 items-center justify-center rounded-sm border border-background text-[10px]">
+                              <span className="flex size-3 items-center justify-center rounded-none border border-background text-[10px]">
                                 6
                               </span>
                             </span>
