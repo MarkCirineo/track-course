@@ -9,7 +9,7 @@ import { deleteCoursePlay } from "@/app/actions/course-play";
 import { toast } from "sonner";
 import { Pencil, Trash2 } from "lucide-react";
 
-type HoleTee = { teeId: string; par: number | null };
+type HoleTee = { teeId: string; par: number | null; distance: number | null; strokeIndex: number | null };
 type HoleForScorecard = { id: string; holeIndex: number; holeTees: HoleTee[] };
 type PlayWithScores = {
   id: string;

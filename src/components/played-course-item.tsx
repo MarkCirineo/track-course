@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { PlayHistoryList } from "@/components/play-history-list";
 
-type HoleTee = { teeId: string; par: number | null };
+type HoleTee = { teeId: string; par: number | null; distance: number | null; strokeIndex: number | null };
 type HoleForScorecard = { id: string; holeIndex: number; holeTees: HoleTee[] };
 type PlayWithScores = {
   id: string;

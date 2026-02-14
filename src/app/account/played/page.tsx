@@ -40,7 +40,8 @@ export default async function AccountPlayedPage() {
     const courseById = new Map(courses.map(c => [c.id, c]));
     const playsByCourse = new Map<string, (typeof plays)[number][]>();
     for (const p of plays) {
-        const list = playsByCourse.get(p.courseId) ?? ([] as (typeof plays)[number][]);
+        const list =
+            playsByCourse.get(p.courseId) ?? ([] as (typeof plays)[number][]);
         list.push(p);
         playsByCourse.set(p.courseId, list);
     }
@@ -90,6 +91,8 @@ export default async function AccountPlayedPage() {
                                     holeTees: h.holeTees.map(ht => ({
                                         teeId: ht.teeId,
                                         par: ht.par,
+                                        distance: ht.distance,
+                                        strokeIndex: ht.strokeIndex,
                                     })),
                                 }))}
                             />

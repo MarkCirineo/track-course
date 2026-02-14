@@ -190,6 +190,8 @@ export default async function CourseDetailPage({
                   holeTees: h.holeTees.map((ht) => ({
                     teeId: ht.teeId,
                     par: ht.par,
+                    distance: ht.distance,
+                    strokeIndex: ht.strokeIndex,
                   })),
                 }))}
                 courseName={course.displayName}
