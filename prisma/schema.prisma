@@ -169,7 +169,7 @@ model CoursePlay {
   createdAt    DateTime  @default(now()) @map("created_at")
   user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   course       Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  tee          Tee       @relation(fields: [teeId], references: [id], onDelete: Cascade)
+  tee          Tee       @relation(fields: [teeId], references: [id], onDelete: Restrict)
   holeScores   CoursePlayHoleScore[]
   @@index([userId])
   @@index([userId, courseId])
