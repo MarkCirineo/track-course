@@ -87,7 +87,7 @@ ALTER TABLE "course_plays" ADD CONSTRAINT "course_plays_user_id_fkey" FOREIGN KE
 ALTER TABLE "course_plays" ADD CONSTRAINT "course_plays_course_id_fkey" FOREIGN KEY ("course_id") REFERENCES "Course"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "course_plays" ADD CONSTRAINT "course_plays_tee_id_fkey" FOREIGN KEY ("tee_id") REFERENCES "Tee"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "course_plays" ADD CONSTRAINT "course_plays_tee_id_fkey" FOREIGN KEY ("tee_id") REFERENCES "Tee"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "course_play_hole_scores" ADD CONSTRAINT "course_play_hole_scores_course_play_id_fkey" FOREIGN KEY ("course_play_id") REFERENCES "course_plays"("id") ON DELETE CASCADE ON UPDATE CASCADE;

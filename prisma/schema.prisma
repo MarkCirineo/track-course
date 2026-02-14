@@ -14,29 +14,32 @@ datasource db {
 }
 
 model Course {
-  id            String   @id @default(cuid())
-  trackmanId    String   @unique
-  dbId         String?
-  createdAt     DateTime?
-  description   String?
-  displayName   String
-  numbersOfHoles Int?
-  courseLocation String?
-  difficulty    Int?
-  tags         String[] @default([])
-  imageUrl      String?
-  videoUrl      String?
-  latitude      Float?
-  longitude     Float?
-  googleMapUrl  String?
-  syncedAt      DateTime?
-  tees         Tee[]
-  holes        Hole[]
-  bookmarks    Bookmark[]
-  coursePlays  CoursePlay[]
-  favorites    Favorite[]
+  id                  String   @id @default(cuid())
+  trackmanId          String   @unique
+  dbId                String?
+  createdAt           DateTime?
+  description         String?
+  displayName         String
+  numbersOfHoles      Int?
+  courseLocation      String?
+  difficulty          Int?
+  tags                String[] @default([])
+  imageUrl            String?
+  videoUrl            String?
+  latitude            Float?
+  longitude           Float?
+  googleMapUrl        String?
+  syncedAt            DateTime?
+  syncFingerprint     String?  @unique
+  syncNameLocationKey String?
+  tees                Tee[]
+  holes               Hole[]
+  bookmarks           Bookmark[]
+  coursePlays         CoursePlay[]
+  favorites           Favorite[]
 
   @@index([displayName])
+  @@index([syncNameLocationKey])
 }
 
 model Tee {
@@ -54,6 +57,7 @@ model Tee {
   holeTees       HoleTee[]
   coursePlays    CoursePlay[]
 
+  @@unique([courseId, teeIndex])
   @@index([courseId])
   @@index([courseRating, slope])
   @@index([gender])
