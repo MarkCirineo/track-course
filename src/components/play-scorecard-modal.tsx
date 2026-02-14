@@ -165,11 +165,12 @@ export function PlayScorecardModal({
               <TableHead className="text-right">
                 <span className="inline-flex items-center gap-1">
                   Score
-                  <TooltipProvider>
+                  <TooltipProvider delayDuration={200}>
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <button
                           type="button"
+                          tabIndex={-1}
                           className="rounded p-0.5 text-muted-foreground hover:bg-muted hover:text-foreground"
                           aria-label="Score legend"
                         >
