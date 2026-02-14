@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "sonner";
 import { ThemeProvider } from "@/components/providers";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { HeaderAuth, HeaderAuthLinks } from "@/components/header-auth";
+import { auth } from "@/lib/auth";
 import Link from "next/link";
 
 const geistSans = Geist({
@@ -20,6 +23,12 @@ export const metadata: Metadata = {
   description: "View Trackman courses with slope and course rating",
 };
 
+async function HeaderSession() {
+  const session = await auth();
+  if (!session?.user) return <HeaderAuthLinks />;
+  return <HeaderAuth user={session.user} />;
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -27,9 +36,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ThemeProvider>
           <header className="border-b">
             <nav className="container mx-auto flex h-14 items-center gap-6 px-4">
@@ -42,10 +49,14 @@ export default function RootLayout({
               <Link href="/courses/map" className="text-muted-foreground hover:text-foreground">
                 Map
               </Link>
-              <ThemeToggle />
+              <div className="ml-auto flex items-center gap-4">
+                <ThemeToggle />
+                <HeaderSession />
+              </div>
             </nav>
           </header>
           {children}
+          <Toaster position="bottom-center" richColors />
         </ThemeProvider>
       </body>
     </html>

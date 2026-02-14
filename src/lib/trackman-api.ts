@@ -117,9 +117,7 @@ export async function getCoursesList(
   const json = (await res.json()) as GetCoursesListResponse;
 
   if (json.errors?.length) {
-    throw new Error(
-      json.errors.map((e) => e.message).join("; ") || "GraphQL errors"
-    );
+    throw new Error(json.errors.map((e) => e.message).join("; ") || "GraphQL errors");
   }
 
   const items = json.data?.courses?.items ?? [];

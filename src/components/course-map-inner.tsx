@@ -12,7 +12,7 @@ type CourseForMap = {
   courseLocation: string | null;
   latitude: number | null;
   longitude: number | null;
-  tees: Array< { name: string | null; courseRating: number | null; slope: number | null } >;
+  tees: Array<{ name: string | null; courseRating: number | null; slope: number | null }>;
 };
 
 const defaultIcon = L.icon({
@@ -30,28 +30,16 @@ export function CourseMapInner({ courses }: { courses: CourseForMap[] }) {
   );
 
   return (
-    <MapContainer
-      center={[40, -95]}
-      zoom={4}
-      className="h-[600px] w-full"
-      scrollWheelZoom
-    >
+    <MapContainer center={[40, -95]} zoom={4} className="h-[600px] w-full" scrollWheelZoom>
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       {withCoords.map((course) => (
-        <Marker
-          key={course.id}
-          position={[course.latitude, course.longitude]}
-          icon={defaultIcon}
-        >
+        <Marker key={course.id} position={[course.latitude, course.longitude]} icon={defaultIcon}>
           <Popup>
             <div className="min-w-[180px]">
-              <Link
-                href={`/courses/${course.id}`}
-                className="font-semibold hover:underline"
-              >
+              <Link href={`/courses/${course.id}`} className="font-semibold hover:underline">
                 {course.displayName}
               </Link>
               {course.courseLocation && (
@@ -59,7 +47,8 @@ export function CourseMapInner({ courses }: { courses: CourseForMap[] }) {
               )}
               {course.tees[0] && (
                 <p className="mt-1 text-xs">
-                  Rating / Slope: {course.tees[0].courseRating ?? "—"} / {course.tees[0].slope ?? "—"}
+                  Rating / Slope: {course.tees[0].courseRating ?? "—"} /{" "}
+                  {course.tees[0].slope ?? "—"}
                 </p>
               )}
             </div>

@@ -4,12 +4,7 @@ import { useMemo, useState } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 
 type HoleTee = {
@@ -67,9 +62,7 @@ export function HoleImagesModal({
   const [selectedTee, setSelectedTee] = useState<Tee | null>(farthestTee ?? null);
 
   const hole = holes[currentIndex];
-  const holeTee = hole
-    ? hole.holeTees.find((ht) => ht.teeId === selectedTee?.id)
-    : undefined;
+  const holeTee = hole ? hole.holeTees.find((ht) => ht.teeId === selectedTee?.id) : undefined;
   const hasImages = holes.some((h) => h.imageUrls.length > 0);
   const canGoPrev = currentIndex > 0;
   const canGoNext = currentIndex < holes.length - 1;
