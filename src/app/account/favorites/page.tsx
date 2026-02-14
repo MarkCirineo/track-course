@@ -30,7 +30,7 @@ export default async function AccountFavoritesPage() {
   const plays = await db.coursePlay.findMany({
     where: { userId },
     select: { courseId: true, holesPlayed: true },
-    orderBy: { playedAt: "desc" },
+    orderBy: { playedAt: "asc" },
   });
   const playByCourse = new Map(plays.map((p) => [p.courseId, { holesPlayed: p.holesPlayed }]));
 
