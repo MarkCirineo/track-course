@@ -24,6 +24,9 @@ export default async function SignupPage({
   return (
     <main className="container mx-auto flex max-w-sm flex-col gap-6 px-4 py-16">
       <h1 className="text-2xl font-semibold">Sign up</h1>
+      {error === "missing_credentials" && (
+        <p className="text-sm text-destructive">Email and password are required.</p>
+      )}
       {error === "EmailAlreadyExists" && (
         <p className="text-sm text-destructive">An account with this email already exists.</p>
       )}
@@ -37,7 +40,9 @@ export default async function SignupPage({
           const email = (formData.get("email") as string)?.trim()?.toLowerCase();
           const password = formData.get("password") as string;
           const name = (formData.get("name") as string)?.trim() || null;
-          if (!email || !password) return;
+          if (!email || !password) {
+            redirect("/signup?error=missing_credentials");
+          }
           if (password.length < 8) {
             redirect("/signup?error=PasswordTooShort");
           }
