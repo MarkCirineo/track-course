@@ -25,9 +25,10 @@ export default async function SignupPage({
     <main className="container mx-auto flex max-w-sm flex-col gap-6 px-4 py-16">
       <h1 className="text-2xl font-semibold">Sign up</h1>
       {error === "EmailAlreadyExists" && (
-        <p className="text-sm text-destructive">
-          An account with this email already exists. Try logging in.
-        </p>
+        <p className="text-sm text-destructive">An account with this email already exists.</p>
+      )}
+      {error === "PasswordTooShort" && (
+        <p className="text-sm text-destructive">Password must be at least 8 characters.</p>
       )}
       <form
         className="flex flex-col gap-4"
@@ -37,19 +38,30 @@ export default async function SignupPage({
           const password = formData.get("password") as string;
           const name = (formData.get("name") as string)?.trim() || null;
           if (!email || !password) return;
+          if (password.length < 8) {
+            redirect("/signup?error=PasswordTooShort");
+          }
           const existing = await db.user.findUnique({ where: { email } });
           if (existing) {
             redirect("/signup?error=EmailAlreadyExists");
           }
-          const hashed = await bcrypt.hash(password, 10);
-          await db.user.create({
-            data: { email, name, password: hashed },
-          });
-          await signIn("credentials", {
-            email,
-            password,
-            redirectTo: "/courses",
-          });
+          try {
+            const hashed = await bcrypt.hash(password, 10);
+            await db.user.create({
+              data: { email, name, password: hashed },
+            });
+            await signIn("credentials", {
+              email,
+              password,
+              redirectTo: "/courses",
+            });
+          } catch (e: unknown) {
+            const isPrisma = e && typeof e === "object" && "code" in e;
+            if (isPrisma && (e as { code: string }).code === "P2002") {
+              redirect("/signup?error=EmailAlreadyExists");
+            }
+            throw e;
+          }
         }}
       >
         <div className="flex flex-col gap-2">
