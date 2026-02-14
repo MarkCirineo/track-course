@@ -72,14 +72,31 @@ export function PlayScorecardModal({
   const inHoles = holesToShow.filter((h) => h.holeIndex >= 9);
   const isFull18 = outHoles.length > 0 && inHoles.length > 0;
 
-  const sumPar = (holeList: HoleForScorecard[]) =>
-    holeList.reduce((s, h) => s + (getPar(h) ?? 0), 0);
-  const sumScore = (holeList: HoleForScorecard[]) =>
-    holeList.reduce((s, h) => s + (getScore(h) ?? 0), 0);
+  const sumPar = (holeList: HoleForScorecard[]): number | null => {
+    let sum = 0;
+    for (const h of holeList) {
+      const p = getPar(h);
+      if (p == null) return null;
+      sum += p;
+    }
+    return sum;
+  };
+  const sumScore = (holeList: HoleForScorecard[]): number | null => {
+    let sum = 0;
+    for (const h of holeList) {
+      const s = getScore(h);
+      if (s == null) return null;
+      sum += s;
+    }
+    return sum;
+  };
 
   const totalPar = sumPar(holesToShow);
   const totalScore = sumScore(holesToShow);
-  const totalToPar = totalPar > 0 ? totalScore - totalPar : null;
+  const totalToPar =
+    totalPar != null && totalScore != null && totalPar > 0
+      ? totalScore - totalPar
+      : null;
 
   const formatToPar = (n: number) => (n === 0 ? "E" : n > 0 ? `+${n}` : String(n));
 
@@ -159,7 +176,9 @@ export function PlayScorecardModal({
               ? "Front 9"
               : play.holesPlayed === "back"
                 ? "Back 9"
-                : "Full 18"}
+                : holes.length <= 9
+                  ? "Full 9"
+                  : "Full 18"}
           </p>
         </DialogHeader>
         <Table>
@@ -252,10 +271,10 @@ export function PlayScorecardModal({
                   {isHole9 && (
                     <TableRow className="border-t-2 border-border bg-muted/30 font-medium">
                       <TableCell>Out</TableCell>
-                      <TableCell className="text-right">{sumPar(outHoles) || "—"}</TableCell>
+                      <TableCell className="text-right">{sumPar(outHoles) ?? "—"}</TableCell>
                       <TableCell />
                       <TableCell />
-                      <TableCell className="text-right">{sumScore(outHoles) || "—"}</TableCell>
+                      <TableCell className="text-right">{sumScore(outHoles) ?? "—"}</TableCell>
                     </TableRow>
                   )}
                 </Fragment>
@@ -266,18 +285,18 @@ export function PlayScorecardModal({
             {isFull18 && (
               <TableRow className="border-t-2 border-border font-medium">
                 <TableCell>In</TableCell>
-                <TableCell className="text-right">{sumPar(inHoles) || "—"}</TableCell>
+                <TableCell className="text-right">{sumPar(inHoles) ?? "—"}</TableCell>
                 <TableCell />
                 <TableCell />
-                <TableCell className="text-right">{sumScore(inHoles) || "—"}</TableCell>
+                <TableCell className="text-right">{sumScore(inHoles) ?? "—"}</TableCell>
               </TableRow>
             )}
             <TableRow className="border-t border-border font-medium">
               <TableCell>Total</TableCell>
-              <TableCell className="text-right">{totalPar || "—"}</TableCell>
+              <TableCell className="text-right">{totalPar ?? "—"}</TableCell>
               <TableCell />
               <TableCell />
-              <TableCell className="text-right">{totalScore || "—"}</TableCell>
+              <TableCell className="text-right">{totalScore ?? "—"}</TableCell>
             </TableRow>
             <TableRow className="border-t-2 border-border font-medium">
               <TableCell>Net</TableCell>
