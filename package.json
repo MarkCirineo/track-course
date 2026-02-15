@@ -1,6 +1,6 @@
 {
   "name": "track-course",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "dev": "dotenv -e .env -- next dev --webpack",
