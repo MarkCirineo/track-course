@@ -3,9 +3,9 @@
   "version": "0.2.1",
   "private": true,
   "scripts": {
-    "dev": "dotenv -e .env -- next dev",
-    "build": "prisma generate && next build",
-    "start": "dotenv -e .env -- next start",
+    "dev": "dotenv -e .env -- next dev --webpack",
+    "build": "prisma generate && next build --webpack",
+    "start": "dotenv -e .env -- next start --webpack",
     "lint": "eslint",
     "postinstall": "prisma generate",
     "format": "prettier --write \"src/**/*.{js,ts,jsx,tsx,json,md}\"",
