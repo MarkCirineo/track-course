@@ -91,7 +91,7 @@ export function HoleImagesModal({
       </Button>
       <Dialog open={open} onOpenChange={handleOpenChange}>
         <DialogContent
-          className="flex max-h-[90vh] max-w-2xl flex-col gap-4 overflow-hidden"
+          className="flex max-h-[85vh] max-w-2xl flex-col gap-4 overflow-hidden"
           aria-describedby={undefined}
         >
           <DialogTitle id="hole-images-title">Hole images</DialogTitle>
@@ -189,13 +189,13 @@ export function HoleImagesModal({
                     {hole.imageUrls.map((url, i) => (
                       <div
                         key={`${hole.id}-${i}`}
-                        className="overflow-hidden rounded-lg border bg-muted/30"
+                        className="relative aspect-video w-full overflow-hidden rounded-lg border bg-muted/30"
                       >
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={url}
                           alt={`Hole ${getHoleLabel(hole)} image ${i + 1}`}
-                          className="h-auto w-full object-contain"
+                          className="absolute inset-0 h-full w-full object-contain"
                         />
                       </div>
                     ))}
