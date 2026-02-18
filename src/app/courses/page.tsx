@@ -101,7 +101,14 @@ export default async function CoursesPage({
   if (teeType) teeConditions.gender = teeType;
 
   const where = {
-    ...(q ? { displayName: { contains: q, mode: "insensitive" as const } } : {}),
+    ...(q
+      ? {
+          OR: [
+            { displayName: { contains: q, mode: "insensitive" as const } },
+            { courseLocation: { contains: q, mode: "insensitive" as const } },
+          ],
+        }
+      : {}),
     ...(Object.keys(teeConditions).length > 0 ? { tees: { some: teeConditions } } : {}),
     ...(holes != null ? { numbersOfHoles: holes } : {}),
   };
