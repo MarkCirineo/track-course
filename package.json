@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "dotenv -e .env -- next dev --webpack",
     "build": "prisma generate && next build --webpack",
-    "start": "dotenv -e .env -- next start --webpack",
+    "start": "dotenv -e .env -- next start",
     "lint": "eslint",
     "postinstall": "prisma generate",
     "format": "prettier --write \"src/**/*.{js,ts,jsx,tsx,json,md}\"",
