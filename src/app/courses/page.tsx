@@ -79,26 +79,49 @@ export default async function CoursesPage({
   const ratingMax = parseNum(params.ratingMax);
   const slopeMin = parseNum(params.slopeMin);
   const slopeMax = parseNum(params.slopeMax);
+  const distanceMin = parseNum(params.distanceMin);
+  const distanceMax = parseNum(params.distanceMax);
   const teeType = parseStr(params.teeType);
+  const teeMatchLogic = parseStr(params.teeMatchLogic) ?? "AND";
   const holes = parseNum(params.holes);
   const page = Math.max(1, parseNum(params.page) ?? 1);
 
-  const teeConditions: {
-    courseRating?: { gte?: number; lte?: number };
-    slope?: { gte?: number; lte?: number };
-    gender?: string;
-  } = {};
-  if (ratingMin != null || ratingMax != null) {
-    teeConditions.courseRating = {};
-    if (ratingMin != null) teeConditions.courseRating.gte = ratingMin;
-    if (ratingMax != null) teeConditions.courseRating.lte = ratingMax;
+  const ratingCondition = ratingMin != null || ratingMax != null ? {
+    courseRating: {
+      ...(ratingMin != null ? { gte: ratingMin } : {}),
+      ...(ratingMax != null ? { lte: ratingMax } : {}),
+    }
+  } : null;
+
+  const slopeCondition = slopeMin != null || slopeMax != null ? {
+    slope: {
+      ...(slopeMin != null ? { gte: slopeMin } : {}),
+      ...(slopeMax != null ? { lte: slopeMax } : {}),
+    }
+  } : null;
+
+  const distanceCondition = distanceMin != null || distanceMax != null ? {
+    courseDistance: {
+      ...(distanceMin != null ? { gte: distanceMin } : {}),
+      ...(distanceMax != null ? { lte: distanceMax } : {}),
+    }
+  } : null;
+
+  let teeConditions: any = {};
+  const metrics = [ratingCondition, slopeCondition, distanceCondition].filter(Boolean);
+
+  if (metrics.length > 0) {
+    if (teeMatchLogic === "OR") {
+      teeConditions.OR = metrics;
+    } else {
+      // AND logic is the default, merge all conditions
+      teeConditions = metrics.reduce((acc, curr) => ({ ...acc, ...curr }), {});
+    }
   }
-  if (slopeMin != null || slopeMax != null) {
-    teeConditions.slope = {};
-    if (slopeMin != null) teeConditions.slope.gte = slopeMin;
-    if (slopeMax != null) teeConditions.slope.lte = slopeMax;
+
+  if (teeType) {
+    teeConditions.gender = teeType;
   }
-  if (teeType) teeConditions.gender = teeType;
 
   const where = {
     ...(q

@@ -39,6 +39,8 @@ export function CourseFilters() {
   const [ratingMax, setRatingMax] = useState(searchParams.get("ratingMax") ?? "");
   const [slopeMin, setSlopeMin] = useState(searchParams.get("slopeMin") ?? "");
   const [slopeMax, setSlopeMax] = useState(searchParams.get("slopeMax") ?? "");
+  const [distanceMin, setDistanceMin] = useState(searchParams.get("distanceMin") ?? "");
+  const [distanceMax, setDistanceMax] = useState(searchParams.get("distanceMax") ?? "");
 
   // Debounce values
   const debouncedQ = useDebounce(q, 400);
@@ -46,6 +48,8 @@ export function CourseFilters() {
   const debouncedRatingMax = useDebounce(ratingMax, 400);
   const debouncedSlopeMin = useDebounce(slopeMin, 400);
   const debouncedSlopeMax = useDebounce(slopeMax, 400);
+  const debouncedDistanceMin = useDebounce(distanceMin, 400);
+  const debouncedDistanceMax = useDebounce(distanceMax, 400);
 
   const updateParams = useCallback(
     (updates: Record<string, string | undefined>) => {
@@ -72,13 +76,17 @@ export function CourseFilters() {
     const currentRatingMax = searchParams.get("ratingMax") ?? "";
     const currentSlopeMin = searchParams.get("slopeMin") ?? "";
     const currentSlopeMax = searchParams.get("slopeMax") ?? "";
+    const currentDistanceMin = searchParams.get("distanceMin") ?? "";
+    const currentDistanceMax = searchParams.get("distanceMax") ?? "";
 
     if (
         debouncedQ !== currentQ ||
         debouncedRatingMin !== currentRatingMin ||
         debouncedRatingMax !== currentRatingMax ||
         debouncedSlopeMin !== currentSlopeMin ||
-        debouncedSlopeMax !== currentSlopeMax
+        debouncedSlopeMax !== currentSlopeMax ||
+        debouncedDistanceMin !== currentDistanceMin ||
+        debouncedDistanceMax !== currentDistanceMax
     ) {
         updateParams({
             q: debouncedQ,
@@ -86,6 +94,8 @@ export function CourseFilters() {
             ratingMax: debouncedRatingMax,
             slopeMin: debouncedSlopeMin,
             slopeMax: debouncedSlopeMax,
+            distanceMin: debouncedDistanceMin,
+            distanceMax: debouncedDistanceMax,
         });
     }
   }, [
@@ -94,6 +104,8 @@ export function CourseFilters() {
     debouncedRatingMax,
     debouncedSlopeMin,
     debouncedSlopeMax,
+    debouncedDistanceMin,
+    debouncedDistanceMax,
     updateParams,
     searchParams
   ]);
@@ -171,6 +183,51 @@ export function CourseFilters() {
           onChange={(e) => setSlopeMax(e.target.value)}
           className="w-24"
         />
+      </div>
+      <div className="flex flex-col gap-1.5">
+        <label htmlFor="distanceMin" className="text-sm font-medium">
+          Distance (min)
+        </label>
+        <Input
+          id="distanceMin"
+          name="distanceMin"
+          type="number"
+          placeholder="e.g. 5000"
+          value={distanceMin}
+          onChange={(e) => setDistanceMin(e.target.value)}
+          className="w-24"
+        />
+      </div>
+      <div className="flex flex-col gap-1.5">
+        <label htmlFor="distanceMax" className="text-sm font-medium">
+          Distance (max)
+        </label>
+        <Input
+          id="distanceMax"
+          name="distanceMax"
+          type="number"
+          placeholder="e.g. 7000"
+          value={distanceMax}
+          onChange={(e) => setDistanceMax(e.target.value)}
+          className="w-24"
+        />
+      </div>
+      <div className="flex flex-col gap-1.5">
+        <label htmlFor="teeMatchLogic" className="text-sm font-medium">
+          Match
+        </label>
+        <Select
+          defaultValue={searchParams.get("teeMatchLogic") ?? "AND"}
+          onValueChange={(v) => updateParams({ teeMatchLogic: v === "AND" ? undefined : v })}
+        >
+          <SelectTrigger id="teeMatchLogic" className="w-32">
+            <SelectValue placeholder="All" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="AND">All</SelectItem>
+            <SelectItem value="OR">Any</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="flex flex-col gap-1.5">
         <label htmlFor="teeType" className="text-sm font-medium">
